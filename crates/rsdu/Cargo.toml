@@ -1,0 +1,20 @@
+[package]
+name = "rsdu"
+version = "0.2.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "Fast disk usage analyzer with a terminal UI, a Rust port of ncdu"
+license.workspace = true
+repository = "https://github.com/awaiden/rs-suite"
+readme = "README.md"
+keywords = ["disk-usage", "tui", "cli", "du", "ncdu"]
+categories = ["command-line-utilities", "filesystem"]
+
+[dependencies]
+clap.workspace = true
+ratatui.workspace = true
+rayon.workspace = true
+regex.workspace = true
+rs-common.workspace = true
+rustix.workspace = true
+serde_json.workspace = true

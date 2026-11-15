@@ -1,0 +1,17 @@
+[package]
+name = "rstop"
+version = "0.1.1"
+edition.workspace = true
+rust-version.workspace = true
+description = "Interactive Linux terminal system monitor inspired by htop and btop"
+license.workspace = true
+repository = "https://github.com/awaiden/rs-suite"
+readme = "README.md"
+keywords = ["top", "htop", "btop", "system-monitor", "tui"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+rs-common.workspace = true
+ratatui.workspace = true
+libc.workspace = true
+clap.workspace = true

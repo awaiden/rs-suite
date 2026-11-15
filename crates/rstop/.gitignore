@@ -1,0 +1,13 @@
+/target
+.env
+.env.*
+!.env.example
+.DS_Store
+.vscode/
+.idea/
+.agents/
+.claude/
+skills-lock.json
+/docs/
+/brag-output/
+/brag-output-*/
