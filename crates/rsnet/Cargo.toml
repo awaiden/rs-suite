@@ -4,5 +4,15 @@ version = "0.1.0"
 edition.workspace = true
 license.workspace = true
 rust-version.workspace = true
+description = "Interactive Linux network bandwidth and connection monitor"
+keywords = ["network", "bandwidth", "monitor", "tui", "linux"]
+categories = ["command-line-utilities", "network-programming"]
 
 [dependencies]
+clap.workspace = true
+crossterm.workspace = true
+libc.workspace = true
+ratatui.workspace = true
+rs-common.workspace = true
+rustix.workspace = true
+serde_json.workspace = true

@@ -1301,6 +1301,15 @@ dependencies = [
 [[package]]
 name = "rsnet"
 version = "0.1.0"
+dependencies = [
+ "clap",
+ "crossterm",
+ "libc",
+ "ratatui",
+ "rs-common",
+ "rustix",
+ "serde_json",
+]
 
 [[package]]
 name = "rstop"

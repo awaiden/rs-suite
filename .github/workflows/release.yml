@@ -6,6 +6,7 @@ on:
       - "v*"
       - "rsdu-v*"
       - "rstop-v*"
+      - "rsnet-v*"
 
 permissions:
   contents: read
@@ -124,16 +125,81 @@ jobs:
             rstop-*.tar.gz
             rstop-*.tar.gz.sha256
 
+  build-rsnet:
+    name: Build rsnet (${{ matrix.target }})
+    if: startsWith(github.ref_name, 'rsnet-v') || startsWith(github.ref_name, 'v')
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            apt_pkg: ""
+            linker_env: ""
+          - target: x86_64-unknown-linux-musl
+            apt_pkg: musl-tools
+            linker_env: ""
+          - target: aarch64-unknown-linux-gnu
+            apt_pkg: gcc-aarch64-linux-gnu libc6-dev-arm64-cross
+            linker_env: aarch64-linux-gnu-gcc
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: rsnet-${{ matrix.target }}
+
+      - name: Install target system tools
+        if: matrix.apt_pkg != ''
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ${{ matrix.apt_pkg }}
+
+      - name: Run tests (native target)
+        if: matrix.target == 'x86_64-unknown-linux-gnu'
+        run: cargo test -p rsnet --locked
+
+      - name: Build release binary
+        env:
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: ${{ matrix.linker_env }}
+        run: cargo build -p rsnet --release --locked --target ${{ matrix.target }}
+
+      - name: Package archive and checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          name="rsnet-${GITHUB_REF_NAME}-${{ matrix.target }}"
+          mkdir -p "$name"
+          cp "target/${{ matrix.target }}/release/rsnet" crates/rsnet/LICENSE crates/rsnet/README.md "$name/"
+          tar czf "$name.tar.gz" "$name"
+          sha256sum "$name.tar.gz" > "$name.tar.gz.sha256"
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rsnet-${{ matrix.target }}
+          path: |
+            rsnet-*.tar.gz
+            rsnet-*.tar.gz.sha256
+
   release:
     name: Publish GitHub Release
     permissions:
       contents: write
-    needs: [build-rsdu, build-rstop]
+    needs: [build-rsdu, build-rstop, build-rsnet]
     if: |
       always() &&
       needs.build-rsdu.result != 'failure' &&
       needs.build-rstop.result != 'failure' &&
-      (needs.build-rsdu.result == 'success' || needs.build-rstop.result == 'success')
+      needs.build-rsnet.result != 'failure' &&
+      (needs.build-rsdu.result == 'success' || needs.build-rstop.result == 'success' || needs.build-rsnet.result == 'success')
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
