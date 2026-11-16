@@ -1,0 +1,15 @@
+pub mod battery;
+pub mod colors;
+pub mod cpu;
+pub mod de_wm_res;
+pub mod disk;
+pub mod gpu;
+pub mod host;
+pub mod kernel;
+pub mod local_ip;
+pub mod memory;
+pub mod os;
+pub mod packages;
+pub mod shell;
+pub mod terminal;
+pub mod uptime;

@@ -4,4 +4,6 @@
 *.swo
 *~
 crates/rsnet/docs/
+crates/rsfetch/docs/
+crates/rsfind/docs/
 brag-output*/

@@ -5,7 +5,10 @@ A Cargo workspace monorepo for fast Rust CLI and TUI system utilities.
 ## Workspace Crates
 
 - **[`rsdu`](crates/rsdu/README.md)** — Fast disk usage analyzer (`rsdu` binary). See [crates/rsdu/README.md](crates/rsdu/README.md).
+- **[`rsfetch`](crates/rsfetch/README.md)** — Fast native Linux system information fetcher (`rsfetch` binary). See [crates/rsfetch/README.md](crates/rsfetch/README.md).
+- **[`rsfind`](crates/rsfind/README.md)** — Fast parallel file finder with interactive fuzzy TUI (`rsfind` binary). See [crates/rsfind/README.md](crates/rsfind/README.md).
 - **[`rsnet`](crates/rsnet/README.md)** — Interactive Linux network bandwidth and connection-per-process monitor (`rsnet` binary). See [crates/rsnet/README.md](crates/rsnet/README.md).
+- **[`rssock`](crates/rssock/README.md)** — Interactive Linux socket and connection explorer (`rssock` binary). See [crates/rssock/README.md](crates/rssock/README.md).
 - **[`rstop`](crates/rstop/README.md)** — Interactive system and process monitor (`rstop` binary). See [crates/rstop/README.md](crates/rstop/README.md).
 - **[`rs-common`](crates/rs-common/)** — Shared internal library for size/rate/duration formatting, TUI color palettes & style helpers, and `/proc` parsing utilities.
 
@@ -13,7 +16,7 @@ A Cargo workspace monorepo for fast Rust CLI and TUI system utilities.
 
 ### Quick Install (Prebuilt Binaries)
 
-Install all tools supported on your platform (`rsdu`, `rstop`, `rsnet` on Linux; `rsdu` on macOS arm64) into `~/.local/bin`:
+Install all tools supported on your platform (`rsdu`, `rsfind`, `rstop`, `rsnet`, `rssock`, `rsfetch` on Linux; `rsdu`, `rsfind` on macOS arm64) into `~/.local/bin`:
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/awaiden/rs-suite/main/install.sh | sh
@@ -40,30 +43,18 @@ curl -fsSL https://raw.githubusercontent.com/awaiden/rs-suite/main/install.sh | 
 
 Environment variables:
 - `INSTALL_DIR`: Target directory (default: `~/.local/bin`)
-- `RSDU_VERSION` / `RSTOP_VERSION` / `RSNET_VERSION`: Pin a specific release tag per tool
-
-#### Per-Tool Installers
-
-Each binary also has its own standalone installer:
-
-```sh
-# rsdu (Linux x86_64/aarch64, macOS arm64)
-curl -fsSL https://raw.githubusercontent.com/awaiden/rs-suite/main/crates/rsdu/install.sh | sh
-
-# rstop (Linux x86_64/aarch64)
-curl -fsSL https://raw.githubusercontent.com/awaiden/rs-suite/main/crates/rstop/install.sh | sh
-
-# rsnet (Linux x86_64/aarch64)
-curl -fsSL https://raw.githubusercontent.com/awaiden/rs-suite/main/crates/rsnet/install.sh | sh
-```
+- `RSDU_VERSION` / `RSFIND_VERSION` / `RSTOP_VERSION` / `RSNET_VERSION` / `RSSOCK_VERSION` / `RSFETCH_VERSION`: Pin a specific release tag per tool
 
 ### Supported Prebuilt Targets
 
 | Tool | Linux `x86_64` | Linux `aarch64` | macOS `arm64` |
 |---|---|---|---|
 | `rsdu` | `x86_64-unknown-linux-gnu` | `aarch64-unknown-linux-gnu` | `aarch64-apple-darwin` |
+| `rsfind` | `x86_64-unknown-linux-gnu` | `aarch64-unknown-linux-gnu` | `aarch64-apple-darwin` |
 | `rstop` | `x86_64-unknown-linux-musl` | `aarch64-unknown-linux-gnu` | — (Linux only) |
 | `rsnet` | `x86_64-unknown-linux-musl` | `aarch64-unknown-linux-gnu` | — (Linux only) |
+| `rssock` | `x86_64-unknown-linux-musl` | `aarch64-unknown-linux-gnu` | — (Linux only) |
+| `rsfetch` | `x86_64-unknown-linux-musl` | `aarch64-unknown-linux-gnu` | — (Linux only) |
 
 All release archives are verified against their `.sha256` checksums before extraction.
 
@@ -73,8 +64,11 @@ Requires Rust **1.85+** (edition 2024):
 
 ```sh
 cargo install --git https://github.com/awaiden/rs-suite rsdu
-cargo install --git https://github.com/awaiden/rs-suite rstop
+cargo install --git https://github.com/awaiden/rs-suite rsfetch
+cargo install --git https://github.com/awaiden/rs-suite rsfind
 cargo install --git https://github.com/awaiden/rs-suite rsnet
+cargo install --git https://github.com/awaiden/rs-suite rssock
+cargo install --git https://github.com/awaiden/rs-suite rstop
 ```
 
 ### Post-Install: `rsnet` Live Packet Capture (Optional)
@@ -95,7 +89,10 @@ cargo clippy --workspace --all-targets
 
 # Build individual binaries
 cargo build --release -p rsdu
+cargo build --release -p rsfetch
+cargo build --release -p rsfind
 cargo build --release -p rsnet
+cargo build --release -p rssock
 cargo build --release -p rstop
 ```
 

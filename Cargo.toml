@@ -2,7 +2,11 @@
 resolver = "2"
 members = [
     "crates/rs-common",
-    "crates/rsdu", "crates/rsnet",
+    "crates/rsdu",
+    "crates/rsfetch",
+    "crates/rsfind",
+    "crates/rsnet",
+    "crates/rssock",
     "crates/rstop",
 ]
 

@@ -5,8 +5,11 @@ on:
     tags:
       - "v*"
       - "rsdu-v*"
+      - "rsfind-v*"
       - "rstop-v*"
       - "rsnet-v*"
+      - "rssock-v*"
+      - "rsfetch-v*"
 
 permissions:
   contents: read
@@ -189,17 +192,194 @@ jobs:
             rsnet-*.tar.gz
             rsnet-*.tar.gz.sha256
 
+  build-rsfind:
+    name: Build rsfind (${{ matrix.target }})
+    if: startsWith(github.ref_name, 'rsfind-v') || startsWith(github.ref_name, 'v')
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, target: x86_64-unknown-linux-gnu }
+          - { os: ubuntu-24.04-arm, target: aarch64-unknown-linux-gnu }
+          - { os: macos-latest, target: aarch64-apple-darwin }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: rsfind-${{ matrix.target }}
+
+      - name: Build release binary
+        run: cargo build -p rsfind --release --locked --target ${{ matrix.target }}
+
+      - name: Package archive and checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          name="rsfind-${GITHUB_REF_NAME}-${{ matrix.target }}"
+          mkdir -p "$name"
+          cp "target/${{ matrix.target }}/release/rsfind" LICENSE crates/rsfind/README.md "$name/"
+          tar czf "$name.tar.gz" "$name"
+          (shasum -a 256 "$name.tar.gz" || sha256sum "$name.tar.gz") > "$name.tar.gz.sha256"
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rsfind-${{ matrix.target }}
+          path: |
+            rsfind-*.tar.gz
+            rsfind-*.tar.gz.sha256
+
+  build-rssock:
+    name: Build rssock (${{ matrix.target }})
+    if: startsWith(github.ref_name, 'rssock-v') || startsWith(github.ref_name, 'v')
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            apt_pkg: ""
+            linker_env: ""
+          - target: x86_64-unknown-linux-musl
+            apt_pkg: musl-tools
+            linker_env: ""
+          - target: aarch64-unknown-linux-gnu
+            apt_pkg: gcc-aarch64-linux-gnu libc6-dev-arm64-cross
+            linker_env: aarch64-linux-gnu-gcc
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: rssock-${{ matrix.target }}
+
+      - name: Install target system tools
+        if: matrix.apt_pkg != ''
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ${{ matrix.apt_pkg }}
+
+      - name: Run tests (native target)
+        if: matrix.target == 'x86_64-unknown-linux-gnu'
+        run: cargo test -p rssock --locked
+
+      - name: Build release binary
+        env:
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: ${{ matrix.linker_env }}
+        run: cargo build -p rssock --release --locked --target ${{ matrix.target }}
+
+      - name: Package archive and checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          name="rssock-${GITHUB_REF_NAME}-${{ matrix.target }}"
+          mkdir -p "$name"
+          cp "target/${{ matrix.target }}/release/rssock" LICENSE crates/rssock/README.md "$name/"
+          tar czf "$name.tar.gz" "$name"
+          sha256sum "$name.tar.gz" > "$name.tar.gz.sha256"
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rssock-${{ matrix.target }}
+          path: |
+            rssock-*.tar.gz
+            rssock-*.tar.gz.sha256
+
+  build-rsfetch:
+    name: Build rsfetch (${{ matrix.target }})
+    if: startsWith(github.ref_name, 'rsfetch-v') || startsWith(github.ref_name, 'v')
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            apt_pkg: ""
+            linker_env: ""
+          - target: x86_64-unknown-linux-musl
+            apt_pkg: musl-tools
+            linker_env: ""
+          - target: aarch64-unknown-linux-gnu
+            apt_pkg: gcc-aarch64-linux-gnu libc6-dev-arm64-cross
+            linker_env: aarch64-linux-gnu-gcc
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: rsfetch-${{ matrix.target }}
+
+      - name: Install target system tools
+        if: matrix.apt_pkg != ''
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ${{ matrix.apt_pkg }}
+
+      - name: Run tests (native target)
+        if: matrix.target == 'x86_64-unknown-linux-gnu'
+        run: cargo test -p rsfetch --locked
+
+      - name: Build release binary
+        env:
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: ${{ matrix.linker_env }}
+        run: cargo build -p rsfetch --release --locked --target ${{ matrix.target }}
+
+      - name: Package archive and checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          name="rsfetch-${GITHUB_REF_NAME}-${{ matrix.target }}"
+          mkdir -p "$name"
+          cp "target/${{ matrix.target }}/release/rsfetch" LICENSE crates/rsfetch/README.md "$name/"
+          tar czf "$name.tar.gz" "$name"
+          sha256sum "$name.tar.gz" > "$name.tar.gz.sha256"
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rsfetch-${{ matrix.target }}
+          path: |
+            rsfetch-*.tar.gz
+            rsfetch-*.tar.gz.sha256
+
   release:
     name: Publish GitHub Release
     permissions:
       contents: write
-    needs: [build-rsdu, build-rstop, build-rsnet]
+    needs: [build-rsdu, build-rsfind, build-rstop, build-rsnet, build-rssock, build-rsfetch]
     if: |
       always() &&
       needs.build-rsdu.result != 'failure' &&
+      needs.build-rsfind.result != 'failure' &&
       needs.build-rstop.result != 'failure' &&
       needs.build-rsnet.result != 'failure' &&
-      (needs.build-rsdu.result == 'success' || needs.build-rstop.result == 'success' || needs.build-rsnet.result == 'success')
+      needs.build-rssock.result != 'failure' &&
+      needs.build-rsfetch.result != 'failure' &&
+      (needs.build-rsdu.result == 'success' || needs.build-rsfind.result == 'success' || needs.build-rstop.result == 'success' || needs.build-rsnet.result == 'success' || needs.build-rssock.result == 'success' || needs.build-rsfetch.result == 'success')
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts

@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-# Install rs-suite binaries (rsdu, rstop, rsnet) from GitHub Releases or source.
+# Install rs-suite binaries (rsdu, rsfind, rstop, rsnet, rssock, rsfetch) from GitHub Releases or source.
 # Run with --help for full usage, flags, and environment variables.
 set -eu
 
@@ -14,15 +14,18 @@ TOOLS=""
 
 usage() {
   cat <<EOF
-rs-suite installer — install rsdu, rstop, and rsnet
+rs-suite installer — install rsdu, rsfind, rstop, rsnet, rssock, and rsfetch
 
 USAGE:
   install.sh [OPTIONS] [TOOL...]
 
 TOOLS:
   rsdu     Fast disk usage analyzer (Linux x86_64/aarch64, macOS arm64)
+  rsfind   Fast parallel file finder & fuzzy TUI (Linux x86_64/aarch64, macOS arm64)
   rstop    Interactive system & process monitor (Linux x86_64/aarch64)
   rsnet    Interactive network bandwidth & connection monitor (Linux x86_64/aarch64)
+  rssock   Interactive socket & connection explorer (Linux x86_64/aarch64)
+  rsfetch  Fast native Linux system information fetcher (Linux x86_64/aarch64)
 
   If no tools are specified, all tools supported on this OS are installed.
 
@@ -37,8 +40,11 @@ OPTIONS:
 ENVIRONMENT:
   INSTALL_DIR           Target install directory (overridden by --dir)
   RSDU_VERSION          Pin release tag for rsdu (overridden by --version)
+  RSFIND_VERSION        Pin release tag for rsfind (overridden by --version)
   RSTOP_VERSION         Pin release tag for rstop (overridden by --version)
   RSNET_VERSION         Pin release tag for rsnet (overridden by --version)
+  RSSOCK_VERSION        Pin release tag for rssock (overridden by --version)
+  RSFETCH_VERSION       Pin release tag for rsfetch (overridden by --version)
 
 EXAMPLES:
   # Install all supported tools to ~/.local/bin
@@ -139,18 +145,18 @@ ARCH="$(uname -m)"
 
 if [ -z "$TOOLS" ]; then
   if [ "$OS" = "Linux" ]; then
-    TOOLS="rsdu rstop rsnet"
+    TOOLS="rsdu rsfind rstop rsnet rssock rsfetch"
   else
-    TOOLS="rsdu"
+    TOOLS="rsdu rsfind"
   fi
 fi
 
 # Validate tool names upfront.
 for tool in $TOOLS; do
   case "$tool" in
-    rsdu|rstop|rsnet) ;;
+    rsdu|rsfind|rstop|rsnet|rssock|rsfetch) ;;
     *)
-      err "unknown tool '$tool' (expected: rsdu, rstop, or rsnet)"
+      err "unknown tool '$tool' (expected: rsdu, rsfind, rstop, rsnet, rssock, or rsfetch)"
       exit 1
       ;;
   esac
@@ -159,7 +165,7 @@ done
 resolve_target() {
   tool="$1"
   case "$tool" in
-    rsdu)
+    rsdu|rsfind)
       case "$OS-$ARCH" in
         Linux-x86_64|Linux-amd64)   echo "x86_64-unknown-linux-gnu" ;;
         Linux-aarch64|Linux-arm64)  echo "aarch64-unknown-linux-gnu" ;;
@@ -167,7 +173,7 @@ resolve_target() {
         *) echo "unsupported" ;;
       esac
       ;;
-    rstop|rsnet)
+    rstop|rsnet|rssock|rsfetch)
       if [ "$OS" != "Linux" ]; then
         echo "unsupported"
         return
@@ -187,9 +193,12 @@ pinned_tag_for() {
     return
   fi
   case "$1" in
-    rsdu)  echo "${RSDU_VERSION:-}" ;;
-    rstop) echo "${RSTOP_VERSION:-}" ;;
-    rsnet) echo "${RSNET_VERSION:-}" ;;
+    rsdu)    echo "${RSDU_VERSION:-}" ;;
+    rsfind)  echo "${RSFIND_VERSION:-}" ;;
+    rstop)   echo "${RSTOP_VERSION:-}" ;;
+    rsnet)   echo "${RSNET_VERSION:-}" ;;
+    rssock)  echo "${RSSOCK_VERSION:-}" ;;
+    rsfetch) echo "${RSFETCH_VERSION:-}" ;;
   esac
 }
 
