@@ -1,0 +1,18 @@
+[package]
+name = "rssvc"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "Interactive systemd service manager and inspector with TUI"
+license.workspace = true
+repository = "https://github.com/awaiden/rs-suite"
+keywords = ["systemd", "service", "systemctl", "tui", "cli"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+clap.workspace = true
+crossterm.workspace = true
+ratatui.workspace = true
+regex.workspace = true
+rs-common.workspace = true
+serde_json.workspace = true

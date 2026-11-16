@@ -7,8 +7,11 @@ A Cargo workspace monorepo for fast Rust CLI and TUI system utilities.
 - **[`rsdu`](crates/rsdu/README.md)** — Fast disk usage analyzer (`rsdu` binary). See [crates/rsdu/README.md](crates/rsdu/README.md).
 - **[`rsfetch`](crates/rsfetch/README.md)** — Fast native Linux system information fetcher (`rsfetch` binary). See [crates/rsfetch/README.md](crates/rsfetch/README.md).
 - **[`rsfind`](crates/rsfind/README.md)** — Fast parallel file finder with interactive fuzzy TUI (`rsfind` binary). See [crates/rsfind/README.md](crates/rsfind/README.md).
+- **[`rsgrep`](crates/rsgrep/README.md)** — Fast parallel content search with interactive split-pane TUI (`rsgrep` binary). See [crates/rsgrep/README.md](crates/rsgrep/README.md).
+- **[`rslog`](crates/rslog/README.md)** — Interactive Linux log and systemd `journald` viewer (`rslog` binary). See [crates/rslog/README.md](crates/rslog/README.md).
 - **[`rsnet`](crates/rsnet/README.md)** — Interactive Linux network bandwidth and connection-per-process monitor (`rsnet` binary). See [crates/rsnet/README.md](crates/rsnet/README.md).
 - **[`rssock`](crates/rssock/README.md)** — Interactive Linux socket and connection explorer (`rssock` binary). See [crates/rssock/README.md](crates/rssock/README.md).
+- **[`rssvc`](crates/rssvc/README.md)** — Interactive systemd service manager and inspector (`rssvc` binary). See [crates/rssvc/README.md](crates/rssvc/README.md).
 - **[`rstop`](crates/rstop/README.md)** — Interactive system and process monitor (`rstop` binary). See [crates/rstop/README.md](crates/rstop/README.md).
 - **[`rs-common`](crates/rs-common/)** — Shared internal library for size/rate/duration formatting, TUI color palettes & style helpers, and `/proc` parsing utilities.
 
@@ -16,7 +19,7 @@ A Cargo workspace monorepo for fast Rust CLI and TUI system utilities.
 
 ### Quick Install (Prebuilt Binaries)
 
-Install all tools supported on your platform (`rsdu`, `rsfind`, `rstop`, `rsnet`, `rssock`, `rsfetch` on Linux; `rsdu`, `rsfind` on macOS arm64) into `~/.local/bin`:
+Install all tools supported on your platform (`rsdu`, `rsfind`, `rsgrep`, `rstop`, `rsnet`, `rssock`, `rsfetch`, `rslog`, `rssvc` on Linux; `rsdu`, `rsfind`, `rsgrep` on macOS arm64) into `~/.local/bin`:
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/awaiden/rs-suite/main/install.sh | sh
@@ -43,7 +46,7 @@ curl -fsSL https://raw.githubusercontent.com/awaiden/rs-suite/main/install.sh | 
 
 Environment variables:
 - `INSTALL_DIR`: Target directory (default: `~/.local/bin`)
-- `RSDU_VERSION` / `RSFIND_VERSION` / `RSTOP_VERSION` / `RSNET_VERSION` / `RSSOCK_VERSION` / `RSFETCH_VERSION`: Pin a specific release tag per tool
+- `RSDU_VERSION` / `RSFIND_VERSION` / `RSGREP_VERSION` / `RSTOP_VERSION` / `RSNET_VERSION` / `RSSOCK_VERSION` / `RSFETCH_VERSION` / `RSLOG_VERSION` / `RSSVC_VERSION`: Pin a specific release tag per tool
 
 ### Supported Prebuilt Targets
 
@@ -51,10 +54,13 @@ Environment variables:
 |---|---|---|---|
 | `rsdu` | `x86_64-unknown-linux-gnu` | `aarch64-unknown-linux-gnu` | `aarch64-apple-darwin` |
 | `rsfind` | `x86_64-unknown-linux-gnu` | `aarch64-unknown-linux-gnu` | `aarch64-apple-darwin` |
+| `rsgrep` | `x86_64-unknown-linux-gnu` | `aarch64-unknown-linux-gnu` | `aarch64-apple-darwin` |
 | `rstop` | `x86_64-unknown-linux-musl` | `aarch64-unknown-linux-gnu` | — (Linux only) |
 | `rsnet` | `x86_64-unknown-linux-musl` | `aarch64-unknown-linux-gnu` | — (Linux only) |
 | `rssock` | `x86_64-unknown-linux-musl` | `aarch64-unknown-linux-gnu` | — (Linux only) |
 | `rsfetch` | `x86_64-unknown-linux-musl` | `aarch64-unknown-linux-gnu` | — (Linux only) |
+| `rslog` | `x86_64-unknown-linux-musl` | `aarch64-unknown-linux-gnu` | — (Linux only) |
+| `rssvc` | `x86_64-unknown-linux-musl` | `aarch64-unknown-linux-gnu` | — (Linux only) |
 
 All release archives are verified against their `.sha256` checksums before extraction.
 
@@ -66,8 +72,11 @@ Requires Rust **1.85+** (edition 2024):
 cargo install --git https://github.com/awaiden/rs-suite rsdu
 cargo install --git https://github.com/awaiden/rs-suite rsfetch
 cargo install --git https://github.com/awaiden/rs-suite rsfind
+cargo install --git https://github.com/awaiden/rs-suite rsgrep
+cargo install --git https://github.com/awaiden/rs-suite rslog
 cargo install --git https://github.com/awaiden/rs-suite rsnet
 cargo install --git https://github.com/awaiden/rs-suite rssock
+cargo install --git https://github.com/awaiden/rs-suite rssvc
 cargo install --git https://github.com/awaiden/rs-suite rstop
 ```
 
@@ -91,8 +100,11 @@ cargo clippy --workspace --all-targets
 cargo build --release -p rsdu
 cargo build --release -p rsfetch
 cargo build --release -p rsfind
+cargo build --release -p rsgrep
+cargo build --release -p rslog
 cargo build --release -p rsnet
 cargo build --release -p rssock
+cargo build --release -p rssvc
 cargo build --release -p rstop
 ```
 

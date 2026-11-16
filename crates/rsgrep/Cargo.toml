@@ -1,0 +1,23 @@
+[package]
+name = "rsgrep"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "Fast parallel content search with interactive TUI"
+license.workspace = true
+repository = "https://github.com/awaiden/rs-suite"
+keywords = ["grep", "search", "ripgrep", "tui", "cli"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+clap.workspace = true
+crossterm.workspace = true
+ignore.workspace = true
+ratatui.workspace = true
+rayon.workspace = true
+regex.workspace = true
+rs-common.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+tempfile = "3"

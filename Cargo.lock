@@ -1389,6 +1389,35 @@ dependencies = [
 ]
 
 [[package]]
+name = "rsgrep"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "crossterm",
+ "ignore",
+ "ratatui",
+ "rayon",
+ "regex",
+ "rs-common",
+ "serde_json",
+ "tempfile",
+]
+
+[[package]]
+name = "rslog"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "crossterm",
+ "ratatui",
+ "rayon",
+ "regex",
+ "rs-common",
+ "serde_json",
+ "tempfile",
+]
+
+[[package]]
 name = "rsnet"
 version = "0.1.0"
 dependencies = [
@@ -1411,6 +1440,18 @@ dependencies = [
  "ratatui",
  "rs-common",
  "rustix",
+ "serde_json",
+]
+
+[[package]]
+name = "rssvc"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "crossterm",
+ "ratatui",
+ "regex",
+ "rs-common",
  "serde_json",
 ]
 

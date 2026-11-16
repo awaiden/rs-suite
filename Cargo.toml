@@ -5,8 +5,11 @@ members = [
     "crates/rsdu",
     "crates/rsfetch",
     "crates/rsfind",
+    "crates/rsgrep",
+    "crates/rslog",
     "crates/rsnet",
     "crates/rssock",
+    "crates/rssvc",
     "crates/rstop",
 ]
 
@@ -19,6 +22,7 @@ rust-version = "1.85"
 clap = { version = "4.6.7", features = ["derive"] }
 ratatui = "0.30.2"
 crossterm = "0.29"
+ignore = "0.4"
 libc = "0.2"
 rayon = "1.12.0"
 regex = "1.13.1"
