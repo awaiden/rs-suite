@@ -38,7 +38,7 @@ jobs:
         run: cargo build --workspace --release --locked
 
   macos:
-    name: Cross-Platform Check (macOS - rs-common & rsdu)
+    name: Cross-Platform Check (macOS - rs-common, rsdu, rsfind, rsgrep)
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -53,7 +53,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Run Clippy
-        run: cargo clippy -p rs-common -p rsdu --all-targets -- -D warnings
+        run: cargo clippy -p rs-common -p rsdu -p rsfind -p rsgrep --all-targets -- -D warnings
 
       - name: Run tests
-        run: cargo test -p rs-common -p rsdu --locked
+        run: cargo test -p rs-common -p rsdu -p rsfind -p rsgrep --locked

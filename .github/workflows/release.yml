@@ -229,7 +229,7 @@ jobs:
           set -euo pipefail
           name="rsfind-${GITHUB_REF_NAME}-${{ matrix.target }}"
           mkdir -p "$name"
-          cp "target/${{ matrix.target }}/release/rsfind" LICENSE crates/rsfind/README.md "$name/"
+          cp "target/${{ matrix.target }}/release/rsfind" crates/rsfind/LICENSE crates/rsfind/README.md "$name/"
           tar czf "$name.tar.gz" "$name"
           (shasum -a 256 "$name.tar.gz" || sha256sum "$name.tar.gz") > "$name.tar.gz.sha256"
 
@@ -293,7 +293,7 @@ jobs:
           set -euo pipefail
           name="rssock-${GITHUB_REF_NAME}-${{ matrix.target }}"
           mkdir -p "$name"
-          cp "target/${{ matrix.target }}/release/rssock" LICENSE crates/rssock/README.md "$name/"
+          cp "target/${{ matrix.target }}/release/rssock" crates/rssock/LICENSE crates/rssock/README.md "$name/"
           tar czf "$name.tar.gz" "$name"
           sha256sum "$name.tar.gz" > "$name.tar.gz.sha256"
 
@@ -357,7 +357,7 @@ jobs:
           set -euo pipefail
           name="rsfetch-${GITHUB_REF_NAME}-${{ matrix.target }}"
           mkdir -p "$name"
-          cp "target/${{ matrix.target }}/release/rsfetch" LICENSE crates/rsfetch/README.md "$name/"
+          cp "target/${{ matrix.target }}/release/rsfetch" crates/rsfetch/LICENSE crates/rsfetch/README.md "$name/"
           tar czf "$name.tar.gz" "$name"
           sha256sum "$name.tar.gz" > "$name.tar.gz.sha256"
 
@@ -403,7 +403,7 @@ jobs:
           set -euo pipefail
           name="rsgrep-${GITHUB_REF_NAME}-${{ matrix.target }}"
           mkdir -p "$name"
-          cp "target/${{ matrix.target }}/release/rsgrep" LICENSE crates/rsgrep/README.md "$name/"
+          cp "target/${{ matrix.target }}/release/rsgrep" crates/rsgrep/LICENSE crates/rsgrep/README.md "$name/"
           tar czf "$name.tar.gz" "$name"
           (shasum -a 256 "$name.tar.gz" || sha256sum "$name.tar.gz") > "$name.tar.gz.sha256"
 
@@ -467,7 +467,7 @@ jobs:
           set -euo pipefail
           name="rslog-${GITHUB_REF_NAME}-${{ matrix.target }}"
           mkdir -p "$name"
-          cp "target/${{ matrix.target }}/release/rslog" LICENSE crates/rslog/README.md "$name/"
+          cp "target/${{ matrix.target }}/release/rslog" crates/rslog/LICENSE crates/rslog/README.md "$name/"
           tar czf "$name.tar.gz" "$name"
           sha256sum "$name.tar.gz" > "$name.tar.gz.sha256"
 
@@ -531,7 +531,7 @@ jobs:
           set -euo pipefail
           name="rssvc-${GITHUB_REF_NAME}-${{ matrix.target }}"
           mkdir -p "$name"
-          cp "target/${{ matrix.target }}/release/rssvc" LICENSE crates/rssvc/README.md "$name/"
+          cp "target/${{ matrix.target }}/release/rssvc" crates/rssvc/LICENSE crates/rssvc/README.md "$name/"
           tar czf "$name.tar.gz" "$name"
           sha256sum "$name.tar.gz" > "$name.tar.gz.sha256"
 
